@@ -54,13 +54,13 @@ function startUp(){
     document.getElementById("puzzleTitle").innerHTML = "Puzzle 1";
     document.getElementById("puzzle").innerHTML = drawHitori(hitori1Numbers, hitori1Blocks, hitori1Rating);
 
-    var puzzleButtons = document.getElementById("puzzles");
+    var puzzleButtons = document.getElementsByClassName("puzzles");
     for(var i = 0; i < puzzleButtons.length; i++){
         puzzleButtons[i].onclick = switchPuzzle;
     }
     setupPuzzle();
-    document.addEventListener("click", findErrors);
-    document.addEventListener("click", showSolution);
+    document.getElementById("check").addEventListener("click", findErrors);
+    document.getElementById("solve").addEventListener("click", showSolution);
 }
 
 function switchPuzzle(e){
@@ -69,13 +69,13 @@ function switchPuzzle(e){
         var puzzleTitle = e.target.value;
         document.getElementById("puzzleTitle").innerHTML = puzzleTitle;
         switch(puzzleID){
-            case "puzzle 1":
+            case "puzzle1":
                 document.getElementById("puzzle").innerHTML = drawHitori(hitori1Numbers, hitori1Blocks, hitori1Rating);
                 break;
-            case "puzzle 2":
+            case "puzzle2":
                 document.getElementById("puzzle").innerHTML = drawHitori(hitori2Numbers, hitori2Blocks, hitori2Rating);
                 break;
-            case "puzzle 3":
+            case "puzzle3":
                 document.getElementById("puzzle").innerHTML = drawHitori(hitori3Numbers, hitori3Blocks, hitori3Rating);
                 break;
         }
@@ -86,31 +86,58 @@ function switchPuzzle(e){
 function setupPuzzle(){
     allCells = document.querySelectorAll("table#hitoriGrid td");
     for(var i = 0; i < allCells.length; i++){
-        allCells[i].style.backgroundColor = "rgb(255, 255, 255)";
-        allCells[i].style.color = "rgb(0, 0, 0)";
+        allCells[i].style.backgroundColor = "white";
+        allCells[i].style.color = "black";
         allCells[i].style.borderRadius = "0";
-        document.addEventListener("mousedown", function(){
+        allCells[i].addEventListener("mousedown", function(e){
             if(e.shiftKey){
-                allCells[i].style.backgroundColor = "rgb(255, 255, 255)";
-                allCells[i].style.color = "rgb(0, 0, 0)";
-                allCells[i].style.borderRadius = "0";
+               e.target.style.backgroundColor = "white";
+               e.target.style.color = "black";
+               e.target.style.borderRadius = "0";
             }
-            if(e.altKey){
-                allCells[i].style.backgroundColor = "rgb(0, 0, 0)";
-                allCells[i].style.color = "rgb(255, 255, 255)";
-                allCells[i].style.borderRadius = "0";
+            else if(e.altKey){
+               e.target.style.backgroundColor = "black";
+               e.target.style.color = "white";
+               e.target.style.borderRadius = "0";
             }
             else{
-                allCells[i].style.backgroundColor = "rgb(101, 101, 101)";
-                allCells[i].style.color = "rgb(255, 255, 255)";
-                allCells[i].style.borderRadius = "50%";
+               e.target.style.backgroundColor = "rgb(101, 101, 101)";
+               e.target.style.color = "white";
+               e.target.style.borderRadius = "50%";
             }
-        });
-    }
-    e.preventDefault();
+
+            e.preventDefault();
+      });
+      allCells[i].addEventListener("mouseover", function(e){
+         if(e.shiftKey){
+            e.target.style.cursor = "url(jpf_eraser.png), alias";
+         }
+         else if(e.altKey){
+            e.target.style.cursor = "url(jpf_black.png), cell";
+         }
+         else{
+            e.target.style.cursor = "url(jpf_circle.png), pointer";
+         }
+      });
+      document.addEventListener("mouseup", checkSolution);
+   }
 }
 
-
+function findErrors(){
+   for(var i = 0; i < allCells.length; i++){
+      if(allCells[i].className === "blocks" && allCells[i].style.backgroundColor === "rgb(101, 101, 100)" || 
+      allCells[i].className === "circles" && allCells[i].style.backgroundColor === "rgb(0, 0, 0)"){
+         allCells[i].style.color = "rgb(255, 0, 0)";
+      }
+   }
+   setTimeout(function(){
+      for(var i = 0; i < allCells.length; i++){
+         if(allCells[i].style.color = "rgb(255, 0, 0)"){
+            allCells[i].style.colr = "rgb(255, 255, 255)";
+         }
+      }
+   }, 1000);
+}
          
 /* ================================================================= */
 
