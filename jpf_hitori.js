@@ -133,7 +133,7 @@ function findErrors(){
    setTimeout(function(){
       for(var i = 0; i < allCells.length; i++){
          if(allCells[i].style.color = "rgb(255, 0, 0)"){
-            allCells[i].style.colr = "rgb(255, 255, 255)";
+            allCells[i].style.color = "rgb(255, 255, 255)";
          }
       }
    }, 1000);
